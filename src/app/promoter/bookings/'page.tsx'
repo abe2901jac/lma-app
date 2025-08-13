@@ -1,37 +1,49 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, CheckCircle, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const bookings = [
+const initialBookings = [
   {
     title: "Summer Soda Fest",
     brand: "FizzCo",
     location: "Downtown Plaza",
-    date: new Date("2024-07-15T12:00:00Z"),
+    date: "2024-07-15T12:00:00Z",
     status: "Confirmed",
   },
   {
     title: "Tech Gadget Expo",
     brand: "Innovate Inc.",
     location: "City Tech Park",
-    date: new Date("2024-06-30T12:00:00Z"),
+    date: "2024-06-30T12:00:00Z",
     status: "Completed",
   },
   {
     title: "Eco-Friendly Fair",
     brand: "GreenLife",
     location: "Central Park",
-    date: new Date("2024-06-15T12:00:00Z"),
+    date: "2024-06-15T12:00:00Z",
     status: "Completed",
   },
 ];
 
+
 export default function MyBookingsPage() {
   const { toast } = useToast();
+  const [bookings, setBookings] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Process dates on the client to avoid server-client mismatch
+    const processedBookings = initialBookings.map(b => ({
+      ...b,
+      date: new Date(b.date)
+    }));
+    setBookings(processedBookings);
+  }, []);
 
   const handleViewDetails = (title: string) => {
     toast({
